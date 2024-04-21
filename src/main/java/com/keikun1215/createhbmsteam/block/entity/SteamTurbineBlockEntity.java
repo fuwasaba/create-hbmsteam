@@ -19,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,6 +35,7 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity {
     SmartFluidTankBehaviour steamTank;
     SmartFluidTankBehaviour lpsTank;
     FuelTypes.FuelType type;
+    int genTick = 0;
     protected ScrollValueBehaviour consumeSpeed;
     //public Boolean generating;
     public SteamTurbineBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
@@ -95,7 +95,7 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity {
     }
     @Override
     public float getGeneratedSpeed() {
-        return convertToDirection(Math.min(generateAmount(), 256), getBlockState().getValue(SteamTurbineBlock.FACING));
+        return steamTank.getPrimaryHandler().getFluid().getAmount() > consumeAmount() ? convertToDirection(Math.min(generateAmount(), 256), getBlockState().getValue(SteamTurbineBlock.FACING)) : 0;
     }
     @Override
     public float calculateAddedStressCapacity() {
@@ -124,6 +124,7 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity {
     @Override
     public void tick() {
         super.tick();
+        if (level == null) return;
         if (!level.isClientSide) {
             sequenceContext = null;
             SmartFluidTank handler = steamTank.getPrimaryHandler();
@@ -198,15 +199,6 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity {
         consumeSpeed.read(compound, true);
     }
     @OnlyIn(Dist.CLIENT)
-    public int prevSpeed;
-    @OnlyIn(Dist.CLIENT)
-    public SuperByteBuffer getOutside() {
-        BlockState blockState = getBlockState();
-        Direction facing = blockState.getOptionalValue(SteamTurbineBlock.FACING)
-                .orElse(Direction.UP);
-        return CachedBufferer.partialFacing(AddonPartialModels.STEAM_TURBINE_BLOCK, blockState, facing.getOpposite());
-    }
-    @OnlyIn(Dist.CLIENT)
     public SuperByteBuffer getBlades() {
         BlockState blockState = getBlockState();
         Direction facing = blockState.getOptionalValue(SteamTurbineBlock.FACING)
@@ -215,8 +207,5 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity {
     }
     public static boolean isValidFuel(SmartFluidTank tank) {
         return FuelTypes.TYPES.get(tank.getFluid().getFluid()) != null;
-    }
-    public static boolean isValid(SteamTurbineBlockEntity turbine) {
-        return isValidFuel(turbine.steamTank.getPrimaryHandler()) && turbine.steamTank.getPrimaryHandler().getFluid().getAmount() > turbine.consumeSpeed.value;
     }
 }
