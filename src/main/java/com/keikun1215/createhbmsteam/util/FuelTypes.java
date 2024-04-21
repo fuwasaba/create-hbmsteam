@@ -1,5 +1,6 @@
 package com.keikun1215.createhbmsteam.util;
 
+import com.keikun1215.createhbmsteam.CreateHBMSteam;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -23,12 +24,19 @@ public class FuelTypes {
         public FuelType get(Fluid fluid) {
             FuelType result = null;
             for (FuelType type : types) {
-                if (type.fluid == fluid.getRegistryName()) {
+                if (type.fluid.toString().equals(fluid.getRegistryName().toString())) {
                     result = type;
                     break;
                 }
             }
             return result;
+        }
+
+        @Override
+        public String toString() {
+            return "TypesF{" +
+                    "types= " + types +
+                    '}';
         }
     }
     public static class FuelType {
@@ -56,6 +64,16 @@ public class FuelTypes {
         }
         public Boolean is(Fluid fluid) {
             return ForgeRegistries.FLUIDS.getValue(this.fluid) != null && fluid.getRegistryName() == this.fluid;
+        }
+
+        @Override
+        public String toString() {
+            return "FuelType{" +
+                    "rate= " + rate +
+                    ", gen= " + gen +
+                    ", fluid= " + fluid +
+                    ", cooled= " + cooled +
+                    '}';
         }
     }
     public static void a() {

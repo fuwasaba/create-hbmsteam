@@ -1,5 +1,6 @@
 package com.keikun1215.createhbmsteam.block.entity;
 
+import com.keikun1215.createhbmsteam.CreateHBMSteam;
 import com.keikun1215.createhbmsteam.block.SteamTurbineBlock;
 import com.keikun1215.createhbmsteam.block.entity.renderer.AddonPartialModels;
 import com.keikun1215.createhbmsteam.util.FuelTypes;
