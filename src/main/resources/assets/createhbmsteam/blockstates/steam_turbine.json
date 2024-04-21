@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "createhbmsteam:block/steam_turbine"
+    },
+    "facing=south": {
+      "model": "createhbmsteam:block/steam_turbine",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "createhbmsteam:block/steam_turbine",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "createhbmsteam:block/steam_turbine",
+      "y": 90
+    }
+  }
+}

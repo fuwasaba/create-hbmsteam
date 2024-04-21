@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8.2",
+  "package": "com.keikun1215.createhbmsteam.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "MixinDemo"
+  ]
+}
